@@ -1,0 +1,258 @@
+/* Manage Users Page Styles */
+.manage-users-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #d7dde3, #cce0ff);
+    font-family: "Nunito Sans", sans-serif;
+    color: #0f172a;
+    padding: 30px 20px;
+  }
+    
+  /* Page Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 650px; /* Increased from 600px by ~25% */
+    margin-bottom: 22px; /* Increased from 20px */
+  }
+    
+  .header h1 {
+    font-size: 1.9rem; /* Increased from 1.8rem */
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+    
+  /* Action Buttons Container */
+  .actions {
+    display: flex;
+    gap: 12px; /* Increased from 10px */
+  }
+    
+  /* Button Styles */
+  .back-btn,
+  .add-user-btn,
+  .submit-btn,
+  .delete-btn {
+    padding: 9px 18px; /* Increased from 8px 15px */
+    border: none;
+    border-radius: 9px; /* Increased from 8px */
+    cursor: pointer;
+    font-size: 0.9rem; /* Increased from 0.85rem */
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+    
+  .back-btn {
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    color: white;
+  }
+    
+  .add-user-btn {
+    background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+    color: white;
+  }
+    
+  .submit-btn {
+    background: linear-gradient(90deg, #4ade80, #16a34a);
+    color: white;
+    width: 100%;
+    padding: 9px; /* Increased from 8px */
+  }
+    
+  .delete-btn {
+    background: linear-gradient(90deg, #f87171, #ef4444);
+    color: white;
+    padding: 5px 10px; /* Increased from 4px 8px */
+    font-size: 0.75rem; /* Increased from 0.7rem */
+  }
+    
+  .back-btn:hover,
+  .add-user-btn:hover,
+  .submit-btn:hover,
+  .delete-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+  }
+    
+  .back-btn:active,
+  .add-user-btn:active,
+  .submit-btn:active,
+  .delete-btn:active {
+    transform: translateY(1px);
+  }
+    
+  /* Error Message */
+  .error-message {
+    background-color: #ffefef;
+    border: 1px solid #ffcaca;
+    border-radius: 12px;
+    padding: 16px; /* Increased from 15px */
+    text-align: center;
+    color: #e74c3c;
+    max-width: 650px; /* Increased from 600px */
+    width: 100%;
+    margin-bottom: 16px; /* Increased from 15px */
+  }
+    
+  /* Add User Form */
+  .add-user-form {
+    width: 100%;
+    max-width: 650px; /* Increased from 600px */
+    margin-bottom: 22px; /* Increased from 20px */
+    background-color: #fff9f9;
+    border-radius: 12px;
+    padding: 18px; /* Increased from 15px */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+    
+  .add-user-form h2 {
+    font-size: 1.3rem; /* Increased from 1.2rem */
+    color: #0f172a;
+    margin-top: 0;
+    margin-bottom: 16px; /* Increased from 15px */
+    border-bottom: 1px solid #e0f2fe;
+    padding-bottom: 9px; /* Increased from 8px */
+  }
+    
+  /* Form Groups */
+  .form-group {
+    margin-bottom: 14px; /* Increased from 12px */
+  }
+    
+  .form-group label {
+    display: block;
+    margin-bottom: 6px; /* Increased from 5px */
+    font-weight: 500;
+    color: #0f172a;
+    font-size: 0.9rem; /* Increased from 0.85rem */
+  }
+    
+  .form-group input {
+    width: 100%;
+    padding: 9px; /* Increased from 8px */
+    border: 1px solid #e0f2fe;
+    border-radius: 9px; /* Increased from 8px */
+    font-size: 0.9rem; /* Increased from 0.85rem */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+    
+  .form-group input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
+  }
+    
+  /* Users Table Container */
+  .users-table-container {
+    width: 100%;
+    max-width: 500px; /* Increased from 400px by 25% */
+    background-color: #fff9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+    
+  /* Users Table */
+  .users-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.73rem; /* Increased from 0.65rem */
+  }
+    
+  .users-table th,
+  .users-table td {
+    padding: 5px 8px; /* Increased from 4px 6px */
+    text-align: left;
+    border-bottom: 1px solid #e0f2fe;
+  }
+    
+  .users-table th {
+    background-color: #f7f9fc;
+    color: #0ea5e9;
+    font-weight: 600;
+    font-size: 0.78rem; /* Increased from 0.7rem */
+  }
+    
+  .users-table tr:hover {
+    background-color: #f7f9fc;
+  }
+    
+  .users-table tr:last-child td {
+    border-bottom: none;
+  }
+    
+  /* Loading and No Users States */
+  .loading,
+  .no-users {
+    padding: 18px 12px; /* Increased from 15px 10px */
+    text-align: center;
+    color: #64748b;
+    font-style: italic;
+    font-size: 0.85rem; /* Increased from 0.8rem */
+  }
+    
+  /* Loading Animation */
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 150px; /* Increased from 120px */
+  }
+    
+  .loading::before {
+    content: "";
+    width: 30px; /* Increased from 25px */
+    height: 30px; /* Increased from 25px */
+    border: 3px solid rgba(14, 165, 233, 0.3);
+    border-radius: 50%;
+    border-top-color: #0ea5e9;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px; /* Increased from 10px */
+    display: block;
+  }
+    
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+    
+  /* Responsive Design */
+  @media (max-width: 550px) { /* Increased from 500px */
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px; /* Increased from 10px */
+    }
+      
+    .actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+      
+    .back-btn,
+    .add-user-btn {
+      padding: 7px 12px; /* Increased from 6px 10px */
+      font-size: 0.8rem; /* Increased from 0.75rem */
+    }
+      
+    .users-table th,
+    .users-table td {
+      padding: 4px 5px; /* Increased from 3px 4px */
+      font-size: 0.65rem; /* Increased from 0.6rem */
+    }
+  }
+  
+  .error-text {
+    color: #ff3333;
+    font-size: 12px; /* Increased from 11px */
+    margin-top: 4px; /* Increased from 3px */
+    margin-bottom: 0;
+  }
