@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaArrowLeft, FaUserPlus, FaTrash, FaSpinner } from "react-icons/fa";
 import "./ManageUsers.css";
 
 const ManageUsers = () => {
@@ -163,22 +164,27 @@ const ManageUsers = () => {
     }
   };
 
+  // Function to generate user avatar
+  const generateUserAvatar = (name) => {
+    return name ? name.charAt(0).toUpperCase() : "U";
+  };
+
   return (
     <div className="manage-users-container">
-      <div className="header">
-        <h1>Manage Users</h1>
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Manage Users</h1>
         <div className="actions">
           <button
             className="back-btn"
             onClick={() => navigate('/home')}
           >
-            Back to Dashboard
+            <FaArrowLeft className="icon-margin" /> Back to Dashboard
           </button>
           <button
             className="add-user-btn"
             onClick={() => setShowAddForm(!showAddForm)}
           >
-            {showAddForm ? 'Cancel' : 'Add User'}
+            <FaUserPlus className="icon-margin" /> {showAddForm ? 'Cancel' : 'Add User'}
           </button>
         </div>
       </div>
@@ -186,97 +192,107 @@ const ManageUsers = () => {
       {error && <div className="error-message">{error}</div>}
 
       {showAddForm && (
-        <div className="add-user-form">
-          <h2>Add New User</h2>
-          <form onSubmit={handleAddUser}>
-            <div className="form-group">
-              <label>Name</label>
-              <input
-                type="text"
-                name="name"
-                value={newUser.name}
-                onChange={handleInputChange}
-                required
-              />
-              {errors.name && <p className="error-text">{errors.name}</p>}
-            </div>
-            <div className="form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={newUser.email}
-                onChange={handleInputChange}
-                required
-              />
-              {errors.email && <p className="error-text">{errors.email}</p>}
-            </div>
-            <div className="form-group">
-              <label>Mobile</label>
-              <input
-                type="text"
-                name="mobile"
-                value={newUser.mobile}
-                onChange={handleInputChange}
-                required
-              />
-              {errors.mobile && <p className="error-text">{errors.mobile}</p>}
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                value={newUser.password}
-                onChange={handleInputChange}
-                required
-              />
-              {errors.password && <p className="error-text">{errors.password}</p>}
-            </div>
-            <button type="submit" className="submit-btn">Add User</button>
-          </form>
+        <div className="dashboard-panel">
+          <div className="section-container">
+            <h2 className="section-title">Add New User</h2>
+            <form onSubmit={handleAddUser}>
+              <div className="form-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={newUser.name}
+                  onChange={handleInputChange}
+                  required
+                />
+                {errors.name && <p className="error-text">{errors.name}</p>}
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={newUser.email}
+                  onChange={handleInputChange}
+                  required
+                />
+                {errors.email && <p className="error-text">{errors.email}</p>}
+              </div>
+              <div className="form-group">
+                <label>Mobile</label>
+                <input
+                  type="text"
+                  name="mobile"
+                  value={newUser.mobile}
+                  onChange={handleInputChange}
+                  required
+                />
+                {errors.mobile && <p className="error-text">{errors.mobile}</p>}
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={newUser.password}
+                  onChange={handleInputChange}
+                  required
+                />
+                {errors.password && <p className="error-text">{errors.password}</p>}
+              </div>
+              <button type="submit" className="submit-btn">Add User</button>
+            </form>
+          </div>
         </div>
       )}
 
-      <div className="users-table-container">
+      <div className="dashboard-panel">
         {isLoading ? (
-          <div className="loading">Loading users...</div>
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Loading users...</p>
+          </div>
         ) : (
-          <table className="users-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Mobile</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.length > 0 ? (
-                users.map(user => (
-                  <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.mobile || 'N/A'}</td>
-                    <td>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDeleteUser(user.id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
+          <div className="section-container">
+            <table className="user-stats-table">
+              <thead>
                 <tr>
-                  <td colSpan="5" className="no-users">No users found</td>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.length > 0 ? (
+                  users.map(user => (
+                    <tr key={user.id}>
+                      <td>
+                        <div className="user-name">
+                          <div className="user-avatar">{generateUserAvatar(user.name)}</div>
+                          {user.name}
+                        </div>
+                      </td>
+                      <td className="user-email">{user.email}</td>
+                      <td>{user.mobile || 'N/A'}</td>
+                      <td>
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDeleteUser(user.id)}
+                        >
+                          <FaTrash className="icon-margin" /> Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" className="no-data">No users found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
