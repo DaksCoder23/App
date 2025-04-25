@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaComment, FaPlus, FaArrowLeft, FaSyncAlt, FaArrowRight } from 'react-icons/fa';
 import './MessageBoard.css';
 
 // Set the base URL for all axios requests
-
 axios.defaults.baseURL = 'http://localhost:5000'; 
 
 const MessageBoard = () => {
@@ -12,7 +12,40 @@ const MessageBoard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newMessageEmail, setNewMessageEmail] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
   const navigate = useNavigate();
+
+  const fetchConversations = async (token) => {
+    try {
+      console.log('Fetching conversations with token:', token);
+      const response = await axios.get('/api/conversations', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      console.log('Conversations response:', response.data);
+      
+      if (Array.isArray(response.data)) {
+        setConversations(response.data);
+      } else {
+        console.error('Unexpected response format:', response.data);
+        setConversations([]);
+      }
+      setLoading(false);
+    } catch (err) {
+      console.error('Failed to load conversations:', err.response?.data || err.message);
+      setError('Failed to load conversations');
+      setLoading(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    
+    setRefreshing(true);
+    await fetchConversations(token);
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     // Get current user from local storage
@@ -29,30 +62,7 @@ const MessageBoard = () => {
     }
     
     // Fetch conversations
-    const fetchConversations = async () => {
-      try {
-        console.log('Fetching conversations with token:', token);
-        const response = await axios.get('/api/conversations', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        
-        console.log('Conversations response:', response.data);
-        
-        if (Array.isArray(response.data)) {
-          setConversations(response.data);
-        } else {
-          console.error('Unexpected response format:', response.data);
-          setConversations([]);
-        }
-        setLoading(false);
-      } catch (err) {
-        console.error('Failed to load conversations:', err.response?.data || err.message);
-        setError('Failed to load conversations');
-        setLoading(false);
-      }
-    };
-    
-    fetchConversations();
+    fetchConversations(token);
     
     // Set up websocket connection
     const setupWebSocket = () => {
@@ -74,7 +84,7 @@ const MessageBoard = () => {
           
           if (data.type === 'new_message') {
             // Refresh conversations to update last message
-            fetchConversations();
+            fetchConversations(token);
           }
         };
         
@@ -141,28 +151,74 @@ const MessageBoard = () => {
     }
   };
 
-  if (loading) return <div className="loading">Loading conversations...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (loading) return <div className="loading-container">
+    <div className="loading-spinner"></div>
+    <p>Loading conversations...</p>
+  </div>;
+  
+  if (error) return <div className="error-container">
+    <p className="error-message">{error}</p>
+    <button className="action-button" onClick={() => navigate('/home')}>
+      <FaArrowLeft size={16} />
+      <span>Back to Dashboard</span>
+    </button>
+  </div>;
 
   return (
     <div className="message-board-container">
-      <h1>Chirp Messages</h1>
+      <div className="header-container">
+        <h1>
+          <FaComment className="header-icon" size={28} />
+          Chirp Messages
+        </h1>
+        
+        <div className="header-actions">
+          
+          
+          <button 
+            className="action-button back-button" 
+            onClick={() => navigate('/home')}
+            title="Back to dashboard"
+          >
+            <FaArrowLeft size={16} />
+            <span className="button-text">Dashboard</span>
+          </button>
+        </div>
+      </div>
       
       <form className="new-conversation-form" onSubmit={startNewConversation}>
-        <input
-          type="email"
-          placeholder="Enter email to start a new conversation"
-          value={newMessageEmail}
-          onChange={(e) => setNewMessageEmail(e.target.value)}
-          required
-        />
-        <button type="submit">Start Conversation</button>
-        
+        <div className="input-container">
+          <input
+            type="email"
+            placeholder="Enter email to start a new conversation"
+            value={newMessageEmail}
+            onChange={(e) => setNewMessageEmail(e.target.value)}
+            required
+          />
+          <button 
+            type="submit" 
+            className="submit-button"
+            title="Start new conversation"
+          >
+            <span className="button-text">Start Conversation</span>
+            <FaArrowRight size={16} />
+          </button>
+        </div>
       </form>
       
       <div className="conversation-grid">
         {!Array.isArray(conversations) || conversations.length === 0 ? (
-          <p>No conversations yet. Start one by entering an email above!</p>
+          <div className="no-conversations">
+            <FaComment size={42} />
+            <p>No conversations yet. Start one by entering an email above!</p>
+            <button 
+              className="create-first-button" 
+              onClick={() => document.querySelector('.new-conversation-form input').focus()}
+            >
+              <FaPlus size={16} />
+              <span>Create your first conversation</span>
+            </button>
+          </div>
         ) : (
           conversations.map((convo) => (
             <div 
@@ -190,11 +246,6 @@ const MessageBoard = () => {
           ))
         )}
       </div>
-      <div className="home-button-container">
-        <button className="back-button" onClick={() => navigate('/home')}>Back to Dashboard</button>
-      </div>
-      
-      
     </div>
   );
 };
